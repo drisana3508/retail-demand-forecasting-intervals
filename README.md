@@ -167,3 +167,16 @@ The q80 model is a decision forecast for the specified cost ratio. The q10–q90
 The notebook uses a fixed random seed for LightGBM and contains the data preparation, training, calibration, evaluation, and inventory-cost calculations. To reproduce the results, download the Kaggle data, upload it when prompted in Colab, and run the notebook from top to bottom.
 
 The measured values in this README come from one run on the stated chronological split. Re-running with changed code, packages, data, or split dates may produce different results.
+### Seasonal-naive baseline comparison
+
+The seasonal-naive baseline predicts each store-item’s sales using its sales from the same weekday one week earlier (`lag_7`). Its residual quantiles are estimated on the calibration period and applied to the test period.
+
+| Measure | Seasonal-naive baseline | LightGBM |
+|---|---:|---:|
+| q50 MAE | 8.742 | 5.439 |
+| q50 RMSE | 11.803 | 7.081 |
+| 80% interval test coverage | 85.5% | 79.8% |
+| Mean interval width | 30.64 units | 17.25 units |
+| q80 inventory cost per item-day | 14.976 | 9.806 |
+
+LightGBM improved point accuracy and had lower measured q80 inventory cost under the example shortage cost of 4 per unit and leftover cost of 1 per unit. The seasonal-naive residual interval covered more than its 80% nominal target, but was substantially wider. This comparison suggests LightGBM provides a more useful balance of coverage and interval width on this test period.
