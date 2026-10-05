@@ -36,7 +36,7 @@ Do not add Kaggle data files to this repository unless the dataset’s rules exp
 
 ## Open and run the notebook
 
-The notebook is `demand_forecasting_intervals.ipynb`.
+The notebook is `Copy_of_demand_forecasting.ipynb`.
 
 1. Open the notebook file in this repository.
 2. Select **Open in Colab** if the link is available, or download the notebook and upload it to [Google Colab](https://colab.research.google.com/).
