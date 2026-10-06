@@ -199,3 +199,18 @@ LightGBM had lower q50 MAE, q50 RMSE, and q80 inventory cost than seasonal naive
 High-demand rows are defined using each series’ 90th-percentile test demand, with ties included; this can make the subset larger than 10% of rows. The event fold includes St. Patrick’s Day, Purim, and Easter. The final holdout includes Pesach End, Orthodox Easter, Cinco de Mayo, and Mother’s Day.
 
 These are sample-based results, not full M5 competition results. The sample includes three stores and 300 series, and the inventory costs are illustrative. The dataset does not provide a direct promotion flag; event, SNAP, and price features are used as available demand signals.
+### Run the M5 extension
+
+The M5 experiment is in [`demand_forecasting_M5.ipynb`](demand_forecasting_M5.ipynb).
+
+1. Open the [M5 Forecasting – Accuracy Data page](https://www.kaggle.com/competitions/m5-forecasting-accuracy/data), sign in, and accept the competition rules if prompted.
+2. Click **Download All** to download the M5 ZIP archive. It includes `sales_train_validation.csv`, `sales_train_evaluation.csv`, `calendar.csv`, and `sell_prices.csv`.
+3. Open `demand_forecasting_M5.ipynb` in Google Colab and choose **Runtime → Run all**.
+4. When prompted by the notebook’s upload cell, select the M5 ZIP archive. The notebook extracts the files into `/content/m5_data`.
+5. If LightGBM is not available in the Colab runtime, run the notebook’s installation cell:
+
+   ```python
+   %pip install -q lightgbm
+   ```
+
+The notebook samples 100 item-store series from each of CA_1, TX_1, and WI_1, then runs three chronological 28-day backtests. It uses the M5 calendar, SNAP, and sell-price data. The Kaggle CSV and ZIP files are not included in this repository; download them from Kaggle when running the notebook.
