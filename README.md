@@ -180,3 +180,22 @@ The seasonal-naive baseline predicts each store-item’s sales using its sales f
 | q80 inventory cost per item-day | 14.976 | 9.806 |
 
 LightGBM improved point accuracy and had lower measured q80 inventory cost under the example shortage cost of 4 per unit and leftover cost of 1 per unit. The seasonal-naive residual interval covered more than its 80% nominal target, but was substantially wider. This comparison suggests LightGBM provides a more useful balance of coverage and interval width on this test period.
+## M5 extension: results on a 300-series sample
+
+The M5 experiment extends the Store Item project with calendar events, state-specific SNAP indicators, sell prices, and the same lag and rolling-sales features.
+
+To keep the experiment manageable in Colab, the sample contains 300 item-store series: 100 each from CA_1, TX_1, and WI_1. The forecasts are repeated one day ahead, using only sales available before each forecast date. Results are from three consecutive 28-day test folds.
+
+The 80% prediction interval is formed from q10 and q90 forecasts. Inventory cost assumes a shortage cost of 4 per unit and a leftover cost of 1 per unit.
+
+| Test fold | q50 MAE: naive / LightGBM | q50 RMSE: naive / LightGBM | Interval coverage | Mean interval width | Event-day coverage | High-demand coverage | q80 cost: naive / LightGBM |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| d_1858–d_1885, event period | 1.074 / 0.794 | 2.243 / 1.749 | 90.8% | 2.564 | 91.6% | 73.9% | 2.430 / 1.856 |
+| d_1886–d_1913, recent period | 1.094 / 0.808 | 2.136 / 1.678 | 90.8% | 2.626 | No event days | 71.1% | 2.457 / 1.861 |
+| d_1914–d_1941, final holdout | 1.153 / 0.836 | 2.169 / 1.606 | 89.8% | 2.648 | 89.2% | 65.2% | 2.512 / 1.909 |
+
+LightGBM had lower q50 MAE, q50 RMSE, and q80 inventory cost than seasonal naive in all three folds. Its q10–q90 intervals covered about 90% of test rows, above their nominal 80% target, so they were conservative overall. Coverage was lower on the high-demand subset, showing that the intervals still miss many demand spikes. The calibration correction was zero in each fold.
+
+High-demand rows are defined using each series’ 90th-percentile test demand, with ties included; this can make the subset larger than 10% of rows. The event fold includes St. Patrick’s Day, Purim, and Easter. The final holdout includes Pesach End, Orthodox Easter, Cinco de Mayo, and Mother’s Day.
+
+These are sample-based results, not full M5 competition results. The sample includes three stores and 300 series, and the inventory costs are illustrative. The dataset does not provide a direct promotion flag; event, SNAP, and price features are used as available demand signals.
